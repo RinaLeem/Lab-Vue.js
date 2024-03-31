@@ -1,6 +1,8 @@
-# y
+# Vue.js lab
 
-This template should help get you started developing with Vue 3 in Vite.
+Лабораторные работы с использованием Vue.js
+
+Lab1. Создание формы регистрации с подтвержением пароля
 
 ## Recommended IDE Setup
 
