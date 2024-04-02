@@ -1,5 +1,4 @@
 <script setup>
-// JS код тут
   import {ref, reactive} from 'vue';
   
   const user = reactive({
@@ -31,7 +30,6 @@
 </script>
 
 <template>
-  <!-- HTML код тут -->
   <main>
     
     <div class="info">
@@ -78,7 +76,6 @@
 </template>
 
 <style scoped>
-/* CSS код тут */
   input{
     margin-bottom: 10px;
   }
