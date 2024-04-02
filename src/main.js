@@ -7,4 +7,4 @@ import Lab2 from './Lab2.vue'
 import ToDo from './ToDo.vue'
 
 
-createApp(ToDo).mount('#app')
+createApp(Lab2).mount('#app')
