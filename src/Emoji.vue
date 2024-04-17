@@ -1,14 +1,18 @@
 <script setup>
-// JS код тут
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { defineProps } from 'vue';
+
+const props = defineProps({
+ emoji: Object
+});
 </script>
 
 <template>
-  <!-- HTML код тут -->
-
-</template>
+ <span v-html="emoji.htmlCode[0]" class="emoji-icon"></span>
+ </template>
 
 <style scoped>
-
+.emoji-icon {
+ font-size: 80px;
+ margin: 30px;
+}
 </style>

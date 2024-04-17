@@ -1,45 +1,30 @@
 <script setup>
 import {ref, onMounted} from 'vue';
+import Emoji from './Emoji.vue';
+import EmojiList from './EmojiList.vue'
+import EmojiMixer from './EmojiMixer.vue';
 
-const myNumber = ref('');
-const numberType = ref('');
-const fact = ref(null);
-
-const loading = ref(false);
-const show = ref(false);
-
-async function handleSearch() {
-    loading.value = true;
-    try {
-        fact.value = await getInfo(myNumber.value, numberType.value);
-    } catch (e) {
-        console.error('Error', e)
-    } finally {
-        loading.value = false;
-    }
-}
-function getInfo(num, type = 'trivia' ) {
-    return fetch(`http://numbersapi.com/${num}/${type}?json`, {
-        method: 'GET',
-    })
-        .then(response => response.json())
-}
+const emojis = ref([]);
+const selectedEmojis = ref([null, null]);
 
 onMounted(() => {
-    handleSearch();
+    loadEmojis();
 })
 
-const getMessage = () => {
-    if (numberType.value === 'year') {
-        return 'скучный год';
-    } else {
-        return 'скучное число';
-    }
-};
+// Загрузка эмоджи
+async function loadEmojis() {
+    const response = await fetch(`https://emojihub.yurace.pro/api/all`);
+    const data = await response.json();
+    emojis.value = data;
+    selectedEmojis.value = [data[83], data[82]];
+}
 
-function findFact(){
-    show.value = true;
-    handleSearch();
+
+
+// Выбор эмоджи
+function handleSelectEmoji(index, selectedEmoji) {
+ console.log('Selected emoji:', selectedEmoji);
+ selectedEmojis.value[index] = selectedEmoji;
 }
 
 </script>
@@ -47,44 +32,31 @@ function findFact(){
 <template>
     <main>
         <div class="container">
-            <h1>Случайные факты о числах</h1><br>        
+           
+            <EmojiList id="left" :emojis="emojis" @selectEmoji="(emoji) => handleSelectEmoji(0, emoji)" />
+                
+            <EmojiMixer :firstEmoji="selectedEmojis[0]" :secondEmoji="selectedEmojis[1]" />
 
-            <form @submit.prevent="handleSearch">
-                <input type="number" v-model.number="myNumber" placeholder="Введите число"/><br>
-                <input type="text" list="types" v-model="numberType" placeholder="Тип факта" ><br>
-                <datalist id="types">
-                    <option value="math"></option>
-                    <option value="year"></option>
-                    <option value="trivia"></option> 
-                </datalist><br>
-                <input type="button" @click="findFact" value="Искать" class="button"><br><br>
-            </form> 
+            <EmojiList id="right" :emojis="emojis" @selectEmoji="(emoji) => handleSelectEmoji(1, emoji)" />
 
-            <div v-if="show">
-                <div v-if="loading">Загрузка...</div>
-                <div v-else-if="fact.found">{{ fact.text }} </div>
-                <div v-else>{{myNumber}} - {{getMessage()}} </div>
-            </div>
             
         </div>
     </main>
 </template>
 
+
 <style scoped>
-.container{
-    width: 500px;
-    border: 4px;
-    border-style:groove;
-    padding: 20px;
+.container {
+ display: flex;
+  justify-content: center;
 }
-input{
-    width: 150px;
-    background-color:rgb(232, 238, 241);
+.emoji-lists {
+ display: flex;
+ justify-content: space-between;
+ width: 100%;
 }
-.button{
-    height: 40px;
-    margin-top: 10px;
-    background-color:rgb(198, 217, 224);
+#left{
+margin-right: 50px;
 }
 
 </style>
