@@ -2,7 +2,7 @@
 import {ref, onMounted} from 'vue';
 
 const myNumber = ref('');
-const numberType = ref('trivia');
+const numberType = ref('');
 const fact = ref(null);
 
 const loading = ref(false);
@@ -11,32 +11,19 @@ const show = ref(false);
 async function handleSearch() {
     loading.value = true;
     try {
-        const response = await fetch(`http://numbersapi.com/${myNumber.value}/${numberType.value}?json`);
-        fact.value = await response.json();
+        fact.value = await getInfo(myNumber.value, numberType.value);
     } catch (e) {
         console.error('Error', e)
     } finally {
         loading.value = false;
     }
 }
-
-// async function handleSearch() {
-//     loading.value = true;
-//     try {
-//         const {data} = await getInfo( );
-//         fact.value = data;
-//     } catch (e) {
-//         console.error('Error', e)
-//     } finally {
-//         loading.value = false;
-//     }
-// }
-// function getInfo( ) {
-//     return fetch(`http://numbersapi.com/${myNumber.value}/${numberType.value}?json`, {
-//         method: 'GET',
-//     })
-//         .then(response => response.json())
-// }
+function getInfo(num, type = 'trivia' ) {
+    return fetch(`http://numbersapi.com/${num}/${type}?json`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
+}
 
 onMounted(() => {
     handleSearch();
@@ -64,7 +51,7 @@ function findFact(){
 
             <form @submit.prevent="handleSearch">
                 <input type="number" v-model.number="myNumber" placeholder="Введите число"/><br>
-                <input type="text" list="types" v-model="numberType" placeholder="Вид факта" ><br>
+                <input type="text" list="types" v-model="numberType" placeholder="Тип факта" ><br>
                 <datalist id="types">
                     <option value="math"></option>
                     <option value="year"></option>
