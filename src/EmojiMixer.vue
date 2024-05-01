@@ -19,11 +19,11 @@ const mixedEmoji = computed(() => {
 
 <template>
   <div>
-    <div v-if="firstEmoji" id="first">
+    <div v-if="firstEmoji" >
       <Emoji :emoji="firstEmoji" />
     </div>
     
-    <div v-if="secondEmoji" id="second">
+    <div v-if="secondEmoji" >
       <Emoji :emoji="secondEmoji" />
     </div> <br>
     
